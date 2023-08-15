@@ -16,6 +16,11 @@ clt,r30b1)
 	ucidef_set_led_default "red" "RED" "r30b1:red" "0"
 	ucidef_set_led_netdev "blue" "BLUE" "r30b1:blue" "eth1"
 	;;
+*rax3000m-emmc)
+	ucidef_set_led_default "power" "POWER" "rax3000m:red" "0"
+	ucidef_set_led_default "network" "NETWORK" "rax3000m:blue" "0"
+	ucidef_set_led_default "system" "SYSTEM" "rax3000m:green" "1"
+	;;
 imou,lc-hx3001)
 	ucidef_set_led_netdev "wan" "WAN" "green:wan" "eth1" "link"
 	ucidef_set_led_netdev "lan" "LAN" "green:lan" "eth0" "link"

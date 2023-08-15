@@ -106,6 +106,31 @@ mtk_factory_get_byte()
 	fi
 }
 
+mtk_factory_read_7981()
+{
+
+	local input_dev=""
+	local offset=""
+	local size=""
+	local final_size=""
+	local FIRMWARE1="MT7981_ePAeLNA_EEPROM.bin"
+	local FIRMWARE2="MT7981_iPAiLNA_EEPROM.bin"
+
+	input_dev=`blkid -t PARTLABEL=factory -o device`
+
+	[ -f "/etc/wireless/l1profile.dat" ] || exit 0
+	cat /etc/wireless/l1profile.dat | grep "EEPROM" > /tmp/l1profile.sh
+	. /tmp/l1profile.sh
+	offset=`printf "%d" $INDEX0_EEPROM_offset`
+	size=`printf "%d" $INDEX0_EEPROM_size`
+	final_size=`expr $offset + $size`
+
+	dd if=$input_dev of=/lib/firmware/$FIRMWARE1 bs=$final_size skip=$offset count=1 2>/dev/null
+	dd if=$input_dev of=/lib/firmware/$FIRMWARE2 bs=$final_size skip=$offset count=1 2>/dev/null
+
+	rm -f /tmp/l1profile.sh
+}
+
 mediatek_setup_macs()
 {
 	local board="$1"
@@ -119,6 +144,12 @@ mediatek_setup_macs()
 	*mt3000*)
 		wan_mac=$(mtd_get_mac_binary $part_name 0x0a)
 		lan_mac=$(macaddr_add "$wan_mac" 1)
+		;;
+	*rax3000m-emmc*)
+		part=`blkid -t PARTLABEL=factory -o device`
+		lan_mac=$(get_mac_binary $part $lan_mac_offset)
+		wan_mac=$(get_mac_binary $part $wan_mac_offset)
+		mtk_factory_read_7981
 		;;
 	*mt2500*)
 		wan_mac=$(get_mac_binary /dev/mmcblk0boot1 0x0a)
