@@ -1,6 +1,6 @@
 --- a/block.c
 +++ b/block.c
-@@ -697,7 +697,7 @@ static int print_block_uci(struct probe_
+@@ -727,7 +727,7 @@ static int print_block_uci(struct probe_
  		printf("\toption\tuuid\t'%s'\n", pr->uuid);
  	else
  		printf("\toption\tdevice\t'%s'\n", pr->dev);
@@ -9,7 +9,7 @@
  
  	return 0;
  }
-@@ -1666,7 +1666,7 @@ static int main_detect(int argc, char **
+@@ -1771,7 +1771,7 @@ static int main_detect(int argc, char **
  	cache_load(0);
  	printf("config 'global'\n");
  	printf("\toption\tanon_swap\t'0'\n");
